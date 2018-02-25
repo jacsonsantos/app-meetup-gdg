@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">The Simpsons</string>
+
+    <string name="title_activity_splash">The Simpsons</string>
+    <string name="diretos">Jacson Santos</string>
+    <string name="nome_personagem">Nome do Personagem</string>
+    <string name="desc_personagem">Shoplifting is a victimless crime, like punching someone in the dark.</string>
+</resources>
