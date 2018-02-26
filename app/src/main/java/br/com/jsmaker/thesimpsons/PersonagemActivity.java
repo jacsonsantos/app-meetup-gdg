@@ -1,5 +1,6 @@
 package br.com.jsmaker.thesimpsons;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -18,12 +19,15 @@ public class PersonagemActivity extends AppCompatActivity {
 
     @BindView(R.id.avatar_personagem)
     ImageView avatar;
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personagem);
         ButterKnife.bind(this);
+        mp = MediaPlayer.create(this, R.raw.simpsons_homer);
+        mp.start();
     }
 
     private void carregarPersonagem(Personagem personagem) {
