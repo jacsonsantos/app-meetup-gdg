@@ -8,14 +8,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import br.com.jsmaker.thesimpsons.adapter.PersonagemAdapter;
 import br.com.jsmaker.thesimpsons.callback.PersonagemCallBack;
+import br.com.jsmaker.thesimpsons.event.PersonagemEvent;
 import br.com.jsmaker.thesimpsons.model.Personagem;
 import br.com.jsmaker.thesimpsons.server.RetrofitBoot;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,10 +37,14 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Call call = new RetrofitBoot().getPersonagemServe().listarPersonagens();
-        call.enqueue(new PersonagemCallBack(MainActivity.this));
+        call.enqueue(new PersonagemCallBack());
     }
 
-    public void carregarLista(final List<Personagem> listPersonagens) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCarregarLista(PersonagemEvent event) {
+
+        final List<Personagem> listPersonagens = event.getListaPersonagens();
+
         adapter = new PersonagemAdapter(MainActivity.this,listPersonagens);
         listaPersonagens = (ListView) findViewById(R.id.personagens);
         listaPersonagens.setAdapter(adapter);
@@ -50,5 +57,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
